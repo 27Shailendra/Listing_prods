@@ -19,7 +19,7 @@ jobs:
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
-          cd ~/todo-app || git clone https://github.com/27Shailendra/Listing_prods.git todo-app && cd todo-app
+          cd ~/Listing_prods || git clone https://github.com/27Shailendra/Listing_prods.git Listing_prods && cd Listing_prods
           git pull origin main
           docker compose down
           docker compose build --no-cache
