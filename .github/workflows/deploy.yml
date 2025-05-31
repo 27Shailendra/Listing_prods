@@ -1,26 +1,24 @@
-name: Deploy TODO App
+- name: SSH into EC2 and deploy
+  uses: appleboy/ssh-action@v0.1.10
+  with:
+    host: ${{ secrets.EC2_HOST }}
+    username: ${{ secrets.EC2_USER }}
+    key: ${{ secrets.EC2_SSH_KEY }}
+    script: |
+      cd ~/todo-app || git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git todo-app && cd todo-app
+      git pull origin main
 
-on:
-  push:
-    branches: [main]
+      # Determine correct Docker Compose command
+      if command -v docker-compose &> /dev/null; then
+        DC="docker-compose"
+      elif docker compose version &> /dev/null; then
+        DC="docker compose"
+      else
+        echo "❌ Docker Compose is not installed"
+        exit 1
+      fi
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: SSH into EC2 and deploy
-      uses: appleboy/ssh-action@v0.1.10
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          cd ~/Listing_prods || git clone https://github.com/27Shailendra/Listing_prods.git Listing_prods && cd Listing_prods
-          git pull origin main
-          docker compose down
-          docker compose build --no-cache
-          docker compose up -d
+      # Use the detected Docker Compose command
+      $DC down
+      $DC build --no-cache
+      $DC up -d
