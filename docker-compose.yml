@@ -14,7 +14,7 @@ services:
       - mongo
 
   frontend:
-    build: ./Frontend
+    build:
     container_name: frontend
     context: ./Frontend
     dockerfile: src/Dockerfile
