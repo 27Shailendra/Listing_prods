@@ -14,12 +14,11 @@ services:
       - mongo
 
   frontend:
-  build:
-    context: ./Frontend
-    dockerfile: Dockerfile
-  container_name: frontend
-  ports:
-    - "80:80"
-  depends_on:
-    - backend
-
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
